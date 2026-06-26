@@ -27,12 +27,30 @@ def evaluate_and_dispatch():
     # ------------------------------------------------------------------
     for index, message in enumerate(LLM_MESSAGES):
         # TODO: Calculate word count by splitting on whitespace
+        words = message.split()
+        words_count = len(words)
+        #print(words_count)
         
         # TODO: Implement the 3-tiered pricing logic
         total_cost = 0.0
+        if words_count <= 10:
+            total_cost += words_count * .02
+        elif words_count >= 11 and words_count <= 25:
+            total_cost += (10 * .02) + ((words_count - 10) * .015)
+        else:
+            total_cost += (10 * .02) + (15 * .015) + ((words_count - 25) * .005)
+        # print(words_count, total_cost)
         
         # TODO: Check for forbidden words (case-insensitive)
-        status = "VALID"
+        status = ""
+        check = any(word in words for word in FORBIDDEN_WORDS)
+        if check == True:
+            status = "INVALID"
+        else:
+            status = "VALID"
+        # print(check)
+        # print(words)
+        print(status)
         
         # TODO: Structure the individual record and add it to evaluation_results
         pass
